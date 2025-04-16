@@ -64,7 +64,7 @@ def get_mem0_client():
             "provider": "openai",
             "config": {
                 "model": embedding_model or "text-embedding-3-small",
-                "embedding_dims": 1536  # Default for text-embedding-3-small
+                "embedding_dims": 1024  # Default for text-embedding-3-small
             }
         }
         
@@ -77,7 +77,7 @@ def get_mem0_client():
             "provider": "ollama",
             "config": {
                 "model": embedding_model or "nomic-embed-text",
-                "embedding_dims": 768  # Default for nomic-embed-text
+                "embedding_dims": 1024  # Default for nomic-embed-text
             }
         }
         
@@ -92,7 +92,7 @@ def get_mem0_client():
         "config": {
             "connection_string": os.environ.get('DATABASE_URL', ''),
             "collection_name": "mem0_memories",
-            "embedding_model_dims": 1536 if llm_provider == "openai" else 768
+            "embedding_model_dims": 1536 if llm_provider == "openai" else 1024
         }
     }
 
