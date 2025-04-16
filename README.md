@@ -1,35 +1,33 @@
-<h1 align="center">MCP-Mem0: Long-Term Memory for AI Agents</h1>
+<h1 align="center">MCP-Mem0：AI 代理的长期记忆</h1>
 
 <p align="center">
   <img src="public/Mem0AndMCP.png" alt="Mem0 and MCP Integration" width="600">
 </p>
 
-A template implementation of the [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server integrated with [Mem0](https://mem0.ai) for providing AI agents with persistent memory capabilities.
+这是一个模板实现，展示了如何将 模型上下文协议（MCP） 服务器与 Mem0 集成，以为 AI 代理提供持久记忆功能。
 
-Use this as a reference point to build your MCP servers yourself, or give this as an example to an AI coding assistant and tell it to follow this example for structure and code correctness!
+您可以将此项目作为构建 MCP 服务器的参考，或者将其作为示例提供给 AI 编码助手，并告诉它遵循此示例的结构和代码正确性！
 
-## Overview
+概览
 
-This project demonstrates how to build an MCP server that enables AI agents to store, retrieve, and search memories using semantic search. It serves as a practical template for creating your own MCP servers, simply using Mem0 and a practical example.
+此项目展示了如何构建一个 MCP 服务器，使 AI 代理能够使用语义搜索存储、检索和搜索记忆。它作为一个实用的模板，用于创建您自己的 MCP 服务器，简单地使用 Mem0 和一个实用示例。
+该实现遵循 Anthropic 提出的构建 MCP 服务器的最佳实践，允许与任何 MCP 兼容的客户端无缝集成。
 
-The implementation follows the best practices laid out by Anthropic for building MCP servers, allowing seamless integration with any MCP-compatible client.
+功能
 
-## Features
+服务器提供三个基本的记忆管理工具：
+save_memory：使用语义索引将任何信息存储在长期记忆中
+get_all_memories：检索所有存储的记忆以获得全面的上下文
+search_memories：使用语义搜索查找相关记忆
 
-The server provides three essential memory management tools:
+先决条件
 
-1. **`save_memory`**: Store any information in long-term memory with semantic indexing
-2. **`get_all_memories`**: Retrieve all stored memories for comprehensive context
-3. **`search_memories`**: Find relevant memories using semantic search
+Python 3.12+
+Supabase 或任何 PostgreSQL 数据库（用于记忆的向量存储）
+您选择的 LLM 提供商的 API 密钥（OpenAI、OpenRouter 或 Ollama）
+如果将 MCP 服务器作为容器运行，建议使用 Docker
 
-## Prerequisites
-
-- Python 3.12+
-- Supabase or any PostgreSQL database (for vector storage of memories)
-- API keys for your chosen LLM provider (OpenAI, OpenRouter, or Ollama)
-- Docker if running the MCP server as a container (recommended)
-
-## Installation
+安装
 
 ### Using uv
 
