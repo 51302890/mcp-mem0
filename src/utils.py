@@ -19,13 +19,30 @@ def get_mem0_client():
     llm_provider = os.getenv('LLM_PROVIDER')
     llm_api_key = os.getenv('LLM_API_KEY')
     llm_model = os.getenv('LLM_CHOICE')
+    llm_base_url = os.getenv('LLM_BASE_URL')
     embedding_model = os.getenv('EMBEDDING_MODEL_CHOICE')
     
     # Initialize config dictionary
     config = {}
     
     # Configure LLM based on provider
-    if llm_provider == 'openai' or llm_provider == 'openrouter':
+    if llm_provider == 'deepseek':
+        # 设置环境变量供OpenAI客户端使用
+        if llm_api_key:
+            os.environ["OPENAI_API_KEY"] = llm_api_key
+        if llm_base_url:
+            os.environ["OPENAI_BASE_URL"] = llm_base_url
+            
+        config["llm"] = {
+            "provider": "openai",
+            "config": {
+                "model": llm_model or "deepseek-chat",
+                "temperature": 0.2,
+                "max_tokens": 2000
+            }
+        }
+            
+    elif llm_provider == 'openai' or llm_provider == 'openrouter':
         config["llm"] = {
             "provider": "openai",
             "config": {
@@ -72,19 +89,17 @@ def get_mem0_client():
         if llm_api_key and not os.environ.get("OPENAI_API_KEY"):
             os.environ["OPENAI_API_KEY"] = llm_api_key
     
-    elif llm_provider == 'ollama':
+    # 单独配置向量模型服务
+    embedding_base_url = os.getenv('EMBEDDING_BASE_URL')
+    if embedding_base_url:
         config["embedder"] = {
             "provider": "ollama",
             "config": {
-                "model": embedding_model or "nomic-embed-text",
-                "embedding_dims": 1024  # Default for nomic-embed-text
+                "model": os.getenv('EMBEDDING_MODEL_CHOICE') or "nomic-embed-text",
+                "embedding_dims": int(os.getenv('EMBEDDING_DIMS') or 1024),
+                "ollama_base_url": embedding_base_url
             }
         }
-        
-        # Set base URL for Ollama if provided
-        embedding_base_url = os.getenv('LLM_BASE_URL')
-        if embedding_base_url:
-            config["embedder"]["config"]["ollama_base_url"] = embedding_base_url
     
     # Configure Supabase vector store
     config["vector_store"] = {
@@ -92,7 +107,7 @@ def get_mem0_client():
         "config": {
             "connection_string": os.environ.get('DATABASE_URL', ''),
             "collection_name": "mem0_memories",
-            "embedding_model_dims": 1536 if llm_provider == "openai" else 1024
+            "embedding_model_dims": 1024  # 统一使用1024维度
         }
     }
 
