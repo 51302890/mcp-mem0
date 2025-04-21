@@ -76,6 +76,8 @@ def get_mem0_client():
             config["llm"]["config"]["ollama_base_url"] = llm_base_url
     
     # Configure embedder based on provider
+    embedding_api_key = os.getenv('EMBEDDING_API_KEY')
+    
     if llm_provider == 'openai':
         config["embedder"] = {
             "provider": "openai",
@@ -86,7 +88,9 @@ def get_mem0_client():
         }
         
         # Set API key in environment if not already set
-        if llm_api_key and not os.environ.get("OPENAI_API_KEY"):
+        if embedding_api_key:
+            os.environ["OPENAI_API_KEY"] = embedding_api_key
+        elif llm_api_key and not os.environ.get("OPENAI_API_KEY"):
             os.environ["OPENAI_API_KEY"] = llm_api_key
     
     # 单独配置向量模型服务
